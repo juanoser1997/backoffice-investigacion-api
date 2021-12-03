@@ -12,15 +12,33 @@ const project = new Schema({
         required: true,
         unique: true
     },
-    objetivosGenerales: String,
-    objetivosEspecificos: [String],
+    objetivos_generales: String,
+    objetivos_especificos: [String],
     presupuesto: Number,
+    facultad:String,
+    inscripciones:[
+         { 
+         id_ins : String,
+         id_estudiante:String,
+         estado:String,
+         fecha_ingreso:Date,
+         fecha_egreso:Date,
+        }
+        ],
     fecha_inicio: {
         type: Date,
         default: new Date()
     },
     fecha_terminacion: Date,
-    estado: {
+    avances: [
+        {
+        id_avance : String,
+        fecha_avance : Date,
+        descripcion : String,
+        observaciones_lider : String, 
+        }
+    ],
+    estado_proyecto: {
         type: String,
         default: "inactivo"
     },

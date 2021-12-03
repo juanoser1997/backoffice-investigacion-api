@@ -110,6 +110,50 @@ const resolvers = {
             } catch (error) {
                 console.log(error)
             }
+        },
+        updateProject: async(parent, args, context, info) => {
+            try {
+                const project = await Project.findOne({ _id : args.project._id })
+                if (project.estado_proyecto == "Activo"){
+                await Project.updateOne({ _id : project.id }, {  $set: {objetivos_generales: args.project.objetivos_generales,objetivos_especificos: args.project.objetivos_especificos,  presupuesto: args.project.presupuesto,nombre:args.project.nombre} })
+                return "proyecto Actualizado "
+            }
+            else {
+                return "Proyecto no Activo " 
+            }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        updateEstadoIncripcion: async(parent, args, context, info) => {
+            try {
+                const project = await Project.findOne({ _id : args._id })
+             await  Project.updateOne({"nombre": project.nombre},{$set: {"inscripciones.$[ins].estado": args.nuevo_estado}},{arrayFilters:[{"ins.id_ins": {$eq: (args.id_ins)}},]})
+            //     if (project.estado_proyecto == "Activo"){
+            //     await Project.updateOne({ _id : project.id }, {  $set: {objetivos_generales: args.project.objetivos_generales,objetivos_especificos: args.project.objetivos_especificos,  presupuesto: args.project.presupuesto,nombre:args.project.nombre} })
+            //     return "proyecto Actualizado "
+            // }
+            // else {
+                return "inscricion actualizada " 
+            // }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        updateObservaciones: async(parent, args, context, info) => {
+            try {
+                const project = await Project.findOne({ _id : args._id })
+             await  Project.updateOne({"nombre": project.nombre},{$set: {"avances.$[avc].observaciones_lider": args.observaciones}},{arrayFilters:[{"avc.id_avance": {$eq: (args.id_avance)}},]})
+            //     if (project.estado_proyecto == "Activo"){
+            //     await Project.updateOne({ _id : project.id }, {  $set: {objetivos_generales: args.project.objetivos_generales,objetivos_especificos: args.project.objetivos_especificos,  presupuesto: args.project.presupuesto,nombre:args.project.nombre} })
+            //     return "proyecto Actualizado "
+            // }
+            // else {
+                return "avance actualizada " 
+            // }
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 }

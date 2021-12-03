@@ -8,8 +8,8 @@ const addUserProject = async (identificacion, nombreProyecto) => {
     const user = await User.findOne({ identificacion })
     if (user && user.estado === "Activo") {
         const project = await Project.findOne({ nombre: nombreProyecto })
-        if (project && project.activo) {
-            if (project.integrantes.find(i => i == user._id)) {
+        if (project && project.estado_proyecto=="Activo") {
+            if (project.integrantes.find(i => i == user.identificacion)) {
                 return "El usuario ya pertenece al proyecto indicado"
             } else {
                 await Project.updateOne({ nombre: nombreProyecto }, { $push: { integrantes: user._id } })
