@@ -47,6 +47,9 @@ const resolvers = {
             return proyectos()
         },
         getProject: async (parent, args, context, info) => getProject(args.nombre),
+        findLiderProjects: async (parent, args, context, info) => {
+           return await Project.find({lider:args.lider})
+        },
     },
     Mutation: {
         createUser: (parent, args, context, info) => {

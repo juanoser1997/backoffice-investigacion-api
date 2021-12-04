@@ -48,6 +48,7 @@ const typeDefs = gql`
         usuario(identificacion: Int): Usuario
         proyectos:[Proyecto]
         getProject(nombre:String):Proyecto
+        findLiderProjects (lider:String):[Proyecto]
     }
     input UserInput{
         nombre: String
@@ -80,6 +81,7 @@ const typeDefs = gql`
         updateProject(project: ProjectUpdateInput ):String
         updateEstadoIncripcion(_id:String, id_ins:String, nuevo_estado:String):String
         updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
+        
     }
 `
 module.exports = typeDefs
