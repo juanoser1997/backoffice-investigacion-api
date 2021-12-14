@@ -5,11 +5,11 @@ const typeDefs = gql`
     scalar Date
 
     type Usuario{
-        nombre: String
+        nombre_completo: String
         identificacion: Int
         estado: String
-        email: String
-        perfil: String
+        correo: String
+        tipo_usuario: String
     }
     type Proyecto{
         _id : String
@@ -53,12 +53,14 @@ const typeDefs = gql`
         getProjectId(_id:String):Proyecto
         findLiderProjects (lider:String):[Proyecto]
         getProjectInscri(id_estudiante:String):[Proyecto]
+        usuariosEstudiantes : [Usuario]
+        liderProject(lider:String): [Proyecto]
     }
     input UserInput{
-        nombre: String
+        nombre_completo: String
         identificacion:Int
         clave: String
-        perfil: String
+        tipo_usuario: String
     }
     input UserUpdateInput{
         nombre: String
@@ -74,10 +76,12 @@ const typeDefs = gql`
     }
     input ProjectInput{
         objetivos_generales: String
+        objetivos_especificos: String
         presupuesto: Int
-        fechaTerminacion: Date
+        fecha_inicio: Date
         lider: String
         nombre:String
+        fase: String
     }
     input ProjectUpdateInput{
         objetivos_generales: String
@@ -90,6 +94,7 @@ const typeDefs = gql`
         createUser(user:UserInput):String
         createProject(project:ProjectInput):String
         activeUser(identificacion:Int):String
+        inactivateUser(ide:Int):String
         deleteUser(ident:Int):String
         deleteProject(nombreProyecto:String):String
         insertUserToProject(identificacion:Int,nombreProyecto:String):String
