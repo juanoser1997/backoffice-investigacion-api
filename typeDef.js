@@ -12,6 +12,7 @@ const typeDefs = gql`
         perfil: String
     }
     type Proyecto{
+        _id : String
         identificador: String
         objetivos_generales: String
         objetivos_especificos: [String]
@@ -25,6 +26,7 @@ const typeDefs = gql`
         estado_proyecto:String
         inscripciones:[inscripciones]
         avances: [avances]
+        aprobacion : String
     }
 
     type  avances  {
@@ -35,7 +37,7 @@ const typeDefs = gql`
     }
 
     type inscripciones{
-        id_ins : String
+        id_inscripcion : String
         id_estudiante:String
         estado:String
         fecha_ingreso:Date
@@ -48,13 +50,27 @@ const typeDefs = gql`
         usuario(identificacion: Int): Usuario
         proyectos:[Proyecto]
         getProject(nombre:String):Proyecto
+        getProjectId(_id:String):Proyecto
         findLiderProjects (lider:String):[Proyecto]
+        getProjectInscri(id_estudiante:String):[Proyecto]
     }
     input UserInput{
         nombre: String
         identificacion:Int
         clave: String
         perfil: String
+    }
+    input UserUpdateInput{
+        nombre: String
+        identificacion:Int
+        contrasena: String
+        correo: String
+        _id:String
+    }
+    input inscripcionesInput{
+        id_inscripcion : String
+        id_estudiante:String
+        estado:String
     }
     input ProjectInput{
         objetivos_generales: String
@@ -79,8 +95,10 @@ const typeDefs = gql`
         insertUserToProject(identificacion:Int,nombreProyecto:String):String
         autenticar(usuario:String, clave:String):String
         updateProject(project: ProjectUpdateInput ):String
-        updateEstadoIncripcion(_id:String, id_ins:String, nuevo_estado:String):String
+        updateEstadoIncripcion(_id:String, id_inscripcion:String, nuevo_estado:String):String
         updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
+        updateUser(user: UserUpdateInput): String
+        updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
         
     }
 `

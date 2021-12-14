@@ -7,6 +7,7 @@ const project = new Schema({
         required: true,
         unique: true
     },
+    _id : {type: Schema.Types.ObjectId},
     nombre: {
         type: String,
         required: true,
@@ -16,9 +17,10 @@ const project = new Schema({
     objetivos_especificos: [String],
     presupuesto: Number,
     facultad:String,
+    aprobacion:String,
     inscripciones:[
          { 
-         id_ins : String,
+         id_inscripcion : String,
          id_estudiante:String,
          estado:String,
          fecha_ingreso:Date,

@@ -18,11 +18,11 @@ const usuario = new Schema({
         type: String,
         default: "Inactivo"
     },
-    email:{
+    correo:{
         type: String,
         unique:true
     },
-    clave: {
+    contrasena: {
         type: String,
         required: true
     }
