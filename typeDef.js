@@ -10,6 +10,8 @@ const typeDefs = gql`
         estado: String
         correo: String
         tipo_usuario: String
+        clave:String
+        _id:String
     }
     type Proyecto{
         _id : String
@@ -63,9 +65,9 @@ const typeDefs = gql`
         tipo_usuario: String
     }
     input UserUpdateInput{
-        nombre: String
+        nombre_completo: String
         identificacion:Int
-        contrasena: String
+        clave: String
         correo: String
         _id:String
     }

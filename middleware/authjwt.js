@@ -7,9 +7,9 @@ const validarToken = (request, response, next) => {
         return response.status(401).json({ response: "Token invalido" })
     }
     try {
-        const perfil = jwt.verify(token, key)
-        if (perfil) {
-            request.perfil = perfil.rolesito
+        const tipo_usuario = jwt.verify(token, key)
+        if (tipo_usuario) {
+            request.tipo_usuario = tipo_usuario.rolesito
             next();
             return
         }
@@ -19,7 +19,7 @@ const validarToken = (request, response, next) => {
     }
 }
 const admin = (request, response, next) => {
-    if (request.perfil != "Admin") {
+    if (request.tipo_usuario != "Admin") {
         return response.status(403).json({ response: "Permisos insuficientes" })
     }
     next();
@@ -32,7 +32,7 @@ const isAdmin = (rol) => {
 }
 
 const estudiante = (request, response, next) => {
-    if (request.perfil != "Estudiante") {
+    if (request.tipo_usuario != "Estudiante") {
         return response.status(403).json({ response: "Permisos insuficientes" })
     }
     next();

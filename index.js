@@ -21,9 +21,9 @@
 //             context: ({ req }) => {
 //                 const token = req.headers.authorization;
 //                 try {
-//                     const perfil = jwt.verify(token, key)
-//                     if (perfil) {
-//                         rol = perfil.rolesito
+//                     const tipo_usuario = jwt.verify(token, key)
+//                     if (tipo_usuario) {
+//                         rol = tipo_usuario.rolesito
 //                         return {rol}
 //                     }
 //                 } catch (error) {

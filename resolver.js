@@ -19,7 +19,7 @@ const {
       estado: "activo",
       clave: "claveFacil",
       email: "ramon@gmail.com",
-      perfil: "estudiante",
+      tipo_usuario: "estudiante",
     },
     {
       nombre: "Ernesto",
@@ -27,14 +27,14 @@ const {
       estado: "inactivo",
       clave: "ClaveDificil",
       email: "ernesto@gmail.com",
-      perfil: "estudiante",
+      tipo_usuario: "estudiante",
     },
     {
       nombre: "Daniel Saavedra",
       identificacion: 123456789,
       estado: "activo",
       email: "daniel@gmail.com",
-      perfil: "lider",
+      tipo_usuario: "lider",
     },
   ];
   const key = "CLAVEDIFICIL";
@@ -129,16 +129,16 @@ const {
         try {
           const usuario = await User.findOne({ email: args.usuario });
           if (!usuario) {
-            return "Verique usuario y contrasena";
+            return "Verique usuario y clave";
           }
   
           const claveDesencriptada = aes256.decrypt(key, usuario.clave);
           if (args.clave != claveDesencriptada) {
-            return "Verique usuario y contrasena";
+            return "Verique usuario y clave";
           }
           const token = jwt.sign(
             {
-              rolesito: usuario.perfil,
+              rolesito: usuario.tipo_usuario,
             },
             key,
             { expiresIn: 60 * 60 * 2 }
@@ -179,9 +179,9 @@ const {
               { _id: args.user._id },
               {
                   $set: {
-                      nombre: args.user.nombre,
+                      nombre_completo: args.user.nombre_completo,
                      identificacion: args.user.identificacion,
-                      contrasena: args.user.contrasena,
+                      clave: args.user.clave,
                       correo: args.user.correo,
                     },
               }

@@ -15,15 +15,15 @@ const singIn = async (request, response) => {
     try {
         const usuario = await Usuario.findOne({ email: request.body?.email })
         if (!usuario) {
-            return response.status(401).json({ response: "Verique usuario y contrasena" })
+            return response.status(401).json({ response: "Verique usuario y clave" })
         }
 
         const claveDesencriptada = aes256.decrypt(key, usuario.clave)
         if (request.body?.clave != claveDesencriptada) {
-            return response.status(401).json({ response: "Verique usuario y contrasena" })
+            return response.status(401).json({ response: "Verique usuario y clave" })
         }
         const token = jwt.sign({
-            rolesito: usuario.perfil
+            rolesito: usuario.tipo_usuario
         }, key, { expiresIn: 60 * 60 * 2 })
 
         response.status(200).json({ jwt: token })
