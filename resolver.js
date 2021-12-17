@@ -12,7 +12,7 @@ const {
   const { isLider } = require("./middleware/authjwt");
   const jwt = require("jsonwebtoken");
   
-  const listUsuarios = [
+  /* const listUsuarios = [
     {
       nombre: "Ramon Castano",
       identificacion: 123456789,
@@ -36,7 +36,7 @@ const {
       email: "daniel@gmail.com",
       tipo_usuario: "lider",
     },
-  ];
+  ]; */
   const key = "CLAVEDIFICIL";
   
   const resolvers = {
@@ -45,8 +45,9 @@ const {
       usuarios: async (parent, args, context, info) => {
         return await User.find()
       },
-      usuario: (parent, args, context, info) =>
-        buscarUsuarioPorIdentificacion(args.identificacion),
+      usuario: async (parent, args, context, info) =>{
+        return await User.findOne({_id:args._id})},
+        
       proyectos: async (parent, args, context, info) => {
         return proyectos();
       },
