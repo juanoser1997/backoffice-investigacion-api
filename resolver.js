@@ -252,6 +252,61 @@ const {
           console.log(error);
         }
       },
+      updateInscripcionProyecto: async(parent, args, context, info) => {
+        try {
+          const user = await User.findOne({identificacion: parseInt(args.id_estudiante)})
+            if (user && user.estado === "Autorizado"){
+              const project = await Project.findOne({nombre:args.nombre})
+              if (project && project.estado_proyecto === 'Activo') {
+                if (project.inscripciones.find (i=> parseInt(i.id_estudiante) == user.identificacion)){
+                  return "El usuario ya pertenece al proyecto indicado"
+
+                }else {
+                  const project = await Project.findOne({nombre : args.nombre })
+           await  Project.updateOne({"nombre": project.nombre},{$push: {"inscripciones": {"id_inscripcion":args.id_inscripcion, "id_estudiante":args.id_estudiante, "estado":"Pendiente"}}})
+           return "Inscripcion creada " 
+          }
+                }else{
+                  return "Proyecto no valido para adicionar mas integrantes"
+                }
+              }else{
+                return "usuario no valido"
+              }
+
+        //     const project = await Project.findOne({nombre : args.nombre })
+        //  await  Project.updateOne({"nombre": project.nombre},{$push: {"inscripciones": {"id_inscripcion":args.id_inscripcion, "id_estudiante":args.id_estudiante, "estado":"Pendiente"}}})
+        
+        //     return "Inscripcion creada " 
+        
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    updateDescripcionAvance: async(parent, args, context, info) => {
+      try {
+          const project = await Project.findOne({nombre : args.nombre })
+       await  Project.updateOne({"nombre": project.nombre},{$set: {"avances.$[avc].descripcion": args.descripcion}},{arrayFilters:[{"avc.id_avance": {$eq: (args.id_avance)}},]})
+    
+          return "descripcion avance actualizada " 
+      // }
+      } catch (error) {
+          console.log(error)
+      }
+  },
+  updateNuevoAvance: async(parent, args, context, info) => {
+    try {
+        const project = await Project.findOne({nombre : args.nombre })
+        let fecha = new Date()
+     await  Project.updateOne({"nombre": project.nombre},{$push: {"avances": {"id_avance":args.id_avance, "fecha_avance": fecha, "descripcion":args.descripcion}}})
+    
+        return "Avance creado " 
+    
+    } catch (error) {
+        console.log(error)
+    }
+},
+
+
     },
   };
   module.exports = resolvers;
