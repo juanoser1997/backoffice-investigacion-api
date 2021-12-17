@@ -106,6 +106,9 @@ const typeDefs = gql`
         updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
         updateUser(user: UserUpdateInput): String
         updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
+        updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
+        updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
+        updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
         
 
         
