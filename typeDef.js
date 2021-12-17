@@ -49,7 +49,7 @@ const typeDefs = gql`
 
     type Query{
         usuarios: [Usuario]
-        usuario(identificacion: Int): Usuario
+        usuario(_id: String): Usuario
         proyectos:[Proyecto]
         getProject(nombre:String):Proyecto
         getProjectId(_id:String):Proyecto
@@ -106,6 +106,8 @@ const typeDefs = gql`
         updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
         updateUser(user: UserUpdateInput): String
         updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
+        
+
         
     }
 `

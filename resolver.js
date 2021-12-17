@@ -12,7 +12,7 @@ const {
   const { isLider } = require("./middleware/authjwt");
   const jwt = require("jsonwebtoken");
   
-  const listUsuarios = [
+  /*const listUsuarios = [
     {
       nombre: "Ramon Castano",
       identificacion: 123456789,
@@ -36,7 +36,7 @@ const {
       email: "daniel@gmail.com",
       tipo_usuario: "lider",
     },
-  ];
+  ];*/
   const key = "CLAVEDIFICIL";
   
   const resolvers = {
@@ -45,8 +45,8 @@ const {
       usuarios: async (parent, args, context, info) => {
         return await User.find()
       },
-      usuario: (parent, args, context, info) =>
-        buscarUsuarioPorIdentificacion(args.identificacion),
+      usuario: async (parent, args, context, info) =>
+       {return await User.findOne ({_id:args._id})},
       proyectos: async (parent, args, context, info) => {
         return proyectos();
       },
@@ -192,7 +192,7 @@ const {
           console.log(error);
         }
       },
-      updateEstadoIncripcion: async (parent, args, context, info) => {
+      updateEstadoInscripcion: async (parent, args, context, info) => {
         try {
           const project = await Project.findOne({ _id: args._id });
           await Project.updateOne(
@@ -250,6 +250,29 @@ const {
           // }
         } catch (error) {
           console.log(error);
+
+          
+          insertUsertoProject: async (parent, args, context, info) =>{
+            const user = await User.findOne({identificacion:args.identificacion})
+            if (user && user.estado === "Autorizado"){
+              const project = await Project.findOne({nombre:args.nombreProyecto})
+              if (project && project.activo) {
+                if (project.inscripciones.find (i=> i == user.identificacion)){
+                  return "El usuario ya pertenece al proyecto indicado"
+
+                }else {
+                  await project.updateOne({nombre:args.nombreProyecto}, { $push: {inscripciones:user.identificacion}})
+                  return "usuario adicionado correctamente"
+                }
+                }else{
+                  return "Proyecto no valido para adicionar mas integrantes"
+                }
+              }else{
+                return "usuario no valido"
+              }
+            }
+        
+
         }
       },
     },
