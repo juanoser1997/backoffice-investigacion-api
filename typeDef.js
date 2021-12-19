@@ -3,7 +3,6 @@ const { gql } = require('apollo-server-express')
 //Nodemon
 const typeDefs = gql`
     scalar Date
-
     type Usuario{
         nombre_completo: String
         identificacion: Int
@@ -30,26 +29,23 @@ const typeDefs = gql`
         avances: [avances]
         aprobacion : String
     }
-
     type  avances  {
         id_avance : String
         fecha_avance : Date
         descripcion : String
         observaciones_lider : String 
     }
-
     type inscripciones{
         id_inscripcion : String
         id_estudiante:String
         estado:String
         fecha_ingreso:Date
         fecha_egreso:Date
-
     }
-
     type Query{
         usuarios: [Usuario]
-        usuario(identificacion: Int): Usuario
+        usuario(_id: String): Usuario
+        usuarioCorreo(correo: String): Usuario
         proyectos:[Proyecto]
         getProject(nombre:String):Proyecto
         getProjectId(_id:String):Proyecto
@@ -63,6 +59,7 @@ const typeDefs = gql`
         identificacion:Int
         clave: String
         tipo_usuario: String
+        correo: String
     }
     input UserUpdateInput{
         nombre_completo: String
@@ -85,6 +82,11 @@ const typeDefs = gql`
         nombre:String
         fase: String
     }
+    type Auth{
+        jwt: String
+        status: Int
+    }
+
     input ProjectUpdateInput{
         objetivos_generales: String
         objetivos_especificos: [String]
@@ -92,25 +94,27 @@ const typeDefs = gql`
         nombre:String
         _id:String
     }
-    type Mutation{
-        createUser(user:UserInput):String
-        createProject(project:ProjectInput):String
-        activeUser(identificacion:Int):String
-        inactivateUser(ide:Int):String
-        deleteUser(ident:Int):String
-        deleteProject(nombreProyecto:String):String
-        insertUserToProject(identificacion:Int,nombreProyecto:String):String
-        autenticar(usuario:String, clave:String):String
-        updateProject(project: ProjectUpdateInput ):String
-        updateEstadoIncripcion(_id:String, id_inscripcion:String, nuevo_estado:String):String
-        updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
-        updateUser(user: UserUpdateInput): String
-        updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
-        updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
-        updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
-        updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
-        
-    }
+
+type Mutation{
+    createUser(user:UserInput):String
+    createProject(project:ProjectInput):String
+    activeUser(identificacion:Int):String
+    inactivateUser(ide:Int):String
+    deleteUser(ident:Int):String
+    deleteProject(nombreProyecto:String):String
+    insertUserToProject(identificacion:Int,nombreProyecto:String):String
+    autenticar(usuario:String, clave:String):Auth
+    updateProject(project: ProjectUpdateInput ):String
+    updateEstadoIncripcion(_id:String, id_inscripcion:String, nuevo_estado:String):String
+    updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
+    updateUser(user: UserUpdateInput): String
+    updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
+    updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
+    updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
+    updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
+    
+    
+}
 `
 module.exports = typeDefs
 

@@ -22,6 +22,7 @@ const iniciarServidor = async () => {
                 const token = req.headers.authorization;
                 try {
                     const tipo_usuario = jwt.verify(token, key)
+                    console.log(`el perfil recibido es ${tipo_usuario.rolesito}`)
                     if (tipo_usuario) {
                         rol = tipo_usuario.rolesito
                         return {rol}
