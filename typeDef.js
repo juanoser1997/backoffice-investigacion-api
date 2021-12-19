@@ -47,12 +47,15 @@ const typeDefs = gql`
         usuario(_id: String): Usuario
         usuarioCorreo(correo: String): Usuario
         proyectos:[Proyecto]
+        MisProyectosEstudiante(id_estudiante: String):[Proyecto]
         getProject(nombre:String):Proyecto
         getProjectId(_id:String):Proyecto
         findLiderProjects (lider:String):[Proyecto]
         getProjectInscri(id_estudiante:String):[Proyecto]
         usuariosEstudiantes : [Usuario]
         liderProject(lider:String): [Proyecto]
+        ProyectosAprobados: [Proyecto]
+        ProyectosPendientes: [Proyecto]
     }
     input UserInput{
         nombre_completo: String
@@ -95,26 +98,30 @@ const typeDefs = gql`
         _id:String
     }
 
-type Mutation{
-    createUser(user:UserInput):String
-    createProject(project:ProjectInput):String
-    activeUser(identificacion:Int):String
-    inactivateUser(ide:Int):String
-    deleteUser(ident:Int):String
-    deleteProject(nombreProyecto:String):String
-    insertUserToProject(identificacion:Int,nombreProyecto:String):String
-    autenticar(usuario:String, clave:String):Auth
-    updateProject(project: ProjectUpdateInput ):String
-    updateEstadoIncripcion(_id:String, id_inscripcion:String, nuevo_estado:String):String
-    updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
-    updateUser(user: UserUpdateInput): String
-    updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
-    updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
-    updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
-    updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
-    
-    
-}
+    type Mutation{
+        createUser(user:UserInput):String
+        createProject(project:ProjectInput):String
+        activeUser(identificacion:Int):String
+        inactivateUser(ide:Int):String
+        deleteUser(ident:Int):String
+        deleteProject(nombreProyecto:String):String
+        insertUserToProject(identificacion:Int,nombreProyecto:String):String
+        autenticar(usuario:String, clave:String):Auth
+        updateProject(project: ProjectUpdateInput ):String
+        updateEstadoInscripcion(_id:String, id_inscripcion:String, nuevo_estado:String):String
+        updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
+        updateUser(user: UserUpdateInput): String
+        updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
+        updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
+        updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
+        updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
+        InactivarProyecto( _id: String ):String
+        ActivarProyecto( _id: String ):String
+        CambiarAprobacionProyecto( _id: String, aprobacion: String ):String
+        CambiarFaseProyecto( _id: String, fase: String ):String
+        
+    }
+
 `
 module.exports = typeDefs
 
