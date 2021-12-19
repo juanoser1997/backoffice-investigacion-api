@@ -79,6 +79,7 @@ const resolvers = {
       } catch (error) {
         console.log(error);
       }
+    },
     usuariosEstudiantes: async () =>
       await User.find({ tipo_usuario: "Estudiante" }),
     liderProject: async (parent, args, context, info) =>
@@ -228,7 +229,7 @@ const resolvers = {
         //     return "proyecto Actualizado "
         // }
         // else {
-        return "inscricion actualizada ";
+        return "inscripcion actualizada ";
         // }
       } catch (error) {
         console.log(error);
