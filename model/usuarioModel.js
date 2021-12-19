@@ -16,7 +16,7 @@ const usuario = new Schema({
     },
     estado: {
         type: String,
-        default: "Inactivo"
+        default: "Pendiente"
     },
     correo:{
         type: String,

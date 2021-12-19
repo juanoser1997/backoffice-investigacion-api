@@ -12,31 +12,8 @@ let aes256 = require("aes256");
 const { isLider } = require("./middleware/authjwt");
 const jwt = require("jsonwebtoken");
 
-/*const listUsuarios = [
-    {
-      nombre: "Ramon Castano",
-      identificacion: 123456789,
-      estado: "activo",
-      clave: "claveFacil",
-      email: "ramon@gmail.com",
-      tipo_usuario: "estudiante",
-    },
-    {
-      nombre: "Ernesto",
-      identificacion: 98765,
-      estado: "inactivo",
-      clave: "ClaveDificil",
-      email: "ernesto@gmail.com",
-      tipo_usuario: "estudiante",
-    },
-    {
-      nombre: "Daniel Saavedra",
-      identificacion: 123456789,
-      estado: "activo",
-      email: "daniel@gmail.com",
-      tipo_usuario: "lider",
-    },
-  ];*/
+
+
 const key = "CLAVEDIFICIL";
 
 const resolvers = {
@@ -102,7 +79,6 @@ const resolvers = {
       } catch (error) {
         console.log(error);
       }
-    },
     usuariosEstudiantes: async () =>
       await User.find({ tipo_usuario: "Estudiante" }),
     liderProject: async (parent, args, context, info) =>
@@ -166,28 +142,33 @@ const resolvers = {
       }
     },
     autenticar: async (parent, args, context, info) => {
-      try {
-        const usuario = await User.findOne({ email: args.usuario });
-        if (!usuario) {
-          return "Verique usuario y clave";
-        }
 
-        const claveDesencriptada = aes256.decrypt(key, usuario.clave);
-        if (args.clave != claveDesencriptada) {
-          return "Verique usuario y clave";
-        }
-        const token = jwt.sign(
-          {
-            rolesito: usuario.tipo_usuario,
-          },
-          key,
-          { expiresIn: 60 * 60 * 2 }
-        );
+        try {
+            const usuario = await User.findOne({ correo: args.usuario })
+            if (!usuario) {
+                return {
+                    status: 401
+                }
+            }
+            //AES256 es una libreria de criptografia para encriptar y desencriptar.
+            const claveDesencriptada = aes256.decrypt(key, usuario.clave)
+            if (args.clave != claveDesencriptada) {
+                return {
+                    status: 401
+                }
+            }
+            const token = jwt.sign({
+                rolesito: usuario.tipo_usuario
+            }, key, { expiresIn: 60 * 60 * 2 })
 
-        return token;
-      } catch (error) {
-        console.log(error);
-      }
+            return {
+                status: 200,
+                jwt: token
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     },
     updateProject: async (parent, args, context, info) => {
       try {
@@ -424,16 +405,7 @@ const resolvers = {
           if (
             inscripcion.fecha_egreso == undefined &&
             inscripcion.estado == "Aceptada"
-          ) {
-            await Project.updateOne(
-              { nombre: project.nombre },
-              { $set: { "inscripciones.$[ins].fecha_egreso": new Date() } },
-              {
-                arrayFilters: [
-                  { "ins.id_inscripcion": { $eq: inscripcion.id_inscripcion } },
-                ],
-              }
-            );
+          ) { await Project.updateOne({ nombre: project.nombre },{ $set: { "inscripciones.$[ins].fecha_egreso": new Date() } },{arrayFilters: [{ "ins.id_inscripcion": { $eq: inscripcion.id_inscripcion } },],});
           }
         });
 

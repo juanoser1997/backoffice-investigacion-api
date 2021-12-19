@@ -19,16 +19,16 @@ const validarToken = (request, response, next) => {
     }
 }
 const admin = (request, response, next) => {
-    if (request.tipo_usuario != "Admin") {
+    if (request.tipo_usuario != "Administrador") {
         return response.status(403).json({ response: "Permisos insuficientes" })
     }
     next();
 }
 const isLider = (rol) => {
-    return rol === "Lider"
+    return rol === "Líder"
 }
 const isAdmin = (rol) => {
-    return rol === "Admin"
+    return rol === "Administrador"
 }
 
 const estudiante = (request, response, next) => {
