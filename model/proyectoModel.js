@@ -2,26 +2,27 @@ const { Schema, model } = require('mongoose')
 
 
 const project = new Schema({
-    identificador: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    _id : {type: Schema.Types.ObjectId},
+  
+  
     nombre: {
         type: String,
         required: true,
         unique: true
     },
     objetivos_generales: String,
+    id_lider:String,
     objetivos_especificos: [String],
     presupuesto: Number,
     facultad:String,
-    aprobacion:String,
+    aprobacion:{
+        type: String,
+        default: "Pendiente"
+    },
     inscripciones:[
          { 
          id_inscripcion : String,
          id_estudiante:String,
+         _id_estudiante : String,
          estado:String,
          fecha_ingreso:Date,
          fecha_egreso:Date,
@@ -42,7 +43,7 @@ const project = new Schema({
     ],
     estado_proyecto: {
         type: String,
-        default: "inactivo"
+        default: "Inactivo"
     },
     fase: String,
     lider: String,

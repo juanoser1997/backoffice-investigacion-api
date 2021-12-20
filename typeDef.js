@@ -38,6 +38,7 @@ const typeDefs = gql`
     type inscripciones{
         id_inscripcion : String
         id_estudiante:String
+        _id_estudiante:String
         estado:String
         fecha_ingreso:Date
         fecha_egreso:Date
@@ -47,10 +48,10 @@ const typeDefs = gql`
         usuario(_id: String): Usuario
         usuarioCorreo(correo: String): Usuario
         proyectos:[Proyecto]
-        MisProyectosEstudiante(id_estudiante: String):[Proyecto]
+        MisProyectosEstudiante(_id_estudiante: String):[Proyecto]
         getProject(nombre:String):Proyecto
         getProjectId(_id:String):Proyecto
-        findLiderProjects (lider:String):[Proyecto]
+        findLiderProjects (id_lider:String):[Proyecto]
         getProjectInscri(id_estudiante:String):[Proyecto]
         usuariosEstudiantes : [Usuario]
         liderProject(lider:String): [Proyecto]
@@ -74,11 +75,14 @@ const typeDefs = gql`
     input inscripcionesInput{
         id_inscripcion : String
         id_estudiante:String
+        _id_estudiante:String
         estado:String
+        fecha_ingreso:Date
     }
     input ProjectInput{
         objetivos_generales: String
         objetivos_especificos: String
+        id_lider: String
         presupuesto: Int
         fecha_inicio: Date
         lider: String
@@ -112,7 +116,7 @@ const typeDefs = gql`
         updateObservaciones(_id:String, id_avance:String, observaciones:String ):String
         updateUser(user: UserUpdateInput): String
         updateEstadoIncripciongroup(ins: [inscripcionesInput], _id:String ):String
-        updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String):String
+        updateInscripcionProyecto(nombre:String, id_inscripcion:String, id_estudiante:String, _id_estudiante: String):String
         updateDescripcionAvance(nombre:String, id_avance:String, descripcion:String ):String
         updateNuevoAvance(nombre:String, id_avance:String, descripcion:String):String
         InactivarProyecto( _id: String ):String

@@ -1,6 +1,7 @@
 const Project = require('../model/proyectoModel')
 const User = require('../model/usuarioModel')
 const { v4: uuidv4 } = require('uuid');
+var mongoose = require('mongoose');
 
 
 
@@ -23,9 +24,19 @@ const addUserProject = async (identificacion, nombreProyecto) => {
     }
 }
 
-const createProject = (project) => {
+const createProject = async (project) => {
     const nuevoProyecto = new Project(project);
+    const projects =  await  Project.find()
+
+//    _id = new mongoose.Types.ObjectId()
+//      nuevoProyecto._id =projects.map((proyecto)=> {
+//          while(proyecto._id == _id){
+//             _id = new mongoose.Types.ObjectId()
+//          }
+//         return  _id
+//      })
     nuevoProyecto.identificador = uuidv4()
+
     return nuevoProyecto.save()
         .then(u => "Proyecto creado")
         .catch(err => console.log(err));

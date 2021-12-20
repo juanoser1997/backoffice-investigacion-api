@@ -11,6 +11,8 @@ const User = require("./model/usuarioModel");
 let aes256 = require("aes256");
 const { isLider } = require("./middleware/authjwt");
 const jwt = require("jsonwebtoken");
+var mongoose = require('mongoose');
+
 
 
 
@@ -33,7 +35,7 @@ const resolvers = {
     },
     getProject: async (parent, args, context, info) => getProject(args.nombre),
     findLiderProjects: async (parent, args, context, info) => {
-      return await Project.find({ lider: args.lider });
+      return await Project.find({ id_lider: args.id_lider });
     },
     getProjectId: async (parent, args, context, info) => {
       const project = await Project.findOne({ _id: args._id });
@@ -68,14 +70,15 @@ const resolvers = {
     },
     MisProyectosEstudiante: async (parent, args, context, info) => {
       try {
-        return await Project.find({
-          $and: [
-            { "incripciones.id_estudiante": args.id_estudiante },
-            { estado_proyecto: "Activo" },
-            { "inscripciones.estado": "Aceptada" },
-            { "inscripciones.fecha_egreso": { $eq: undefined } },
-          ],
-        });
+        return await Project.find({ "inscripciones._id_estudiante": args._id_estudiante});
+        // return await Project.find({
+        //   $and: [
+        //     { "incripciones._id_estudiante": args._id_estudiante },
+        //     { estado_proyecto: "Activo" },
+        //     // { "inscripciones.estado": "Aceptada" },
+        //     // { "inscripciones.fecha_egreso": { $eq: undefined } },
+        //   ],
+        // });
       } catch (error) {
         console.log(error);
       }
@@ -279,22 +282,22 @@ const resolvers = {
     updateInscripcionProyecto: async (parent, args, context, info) => {
       try {
         const user = await User.findOne({
-          identificacion: parseInt(args.id_estudiante),
+          _id : args._id_estudiante,
         });
         if (user && user.estado === "Autorizado") {
           const project = await Project.findOne({ nombre: args.nombre });
           if (project && project.estado_proyecto === "Activo") {
             if (
               project.inscripciones.find(
-                (i) => parseInt(i.id_estudiante) == user.identificacion
+                (i) => i._id_estudiante == user._id
               )
             ) {
               let result = ""
               project.inscripciones.map(async (ins) => {
-                if (ins.id_estudiante == String(user.identificacion)) {
+                if (ins._id_estudiante == user._id) {
 
                   if (ins.fecha_egreso == undefined) {
-                    console.log(ins.id_estudiante)
+                    console.log(ins._id_estudiante)
                     result = "El usuario ya pertenece al proyecto indicado";
                   } else {
                     result = "Se ha inscrito nuevamente al proyecto";
@@ -331,6 +334,7 @@ const resolvers = {
                     inscripciones: {
                       id_inscripcion: args.id_inscripcion,
                       id_estudiante: args.id_estudiante,
+                      _id_estudiante: args._id_estudiante,
                       estado: "Pendiente",
                     },
                   },
