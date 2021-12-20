@@ -81,7 +81,7 @@ const typeDefs = gql`
     }
     input ProjectInput{
         objetivos_generales: String
-        objetivos_especificos: String
+        objetivos_especificos: [String]
         id_lider: String
         presupuesto: Int
         fecha_inicio: Date
